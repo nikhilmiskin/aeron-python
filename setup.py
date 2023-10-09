@@ -122,6 +122,5 @@ setup(
     long_description='',
     ext_modules=[CMakeExtension('aeronpy')],
     cmdclass=dict(build_ext=CMakeBuild),
-    zip_safe=False,
-    python_requires='>=3.6.*'
+    zip_safe=False
 )
