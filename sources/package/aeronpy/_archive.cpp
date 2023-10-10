@@ -17,7 +17,6 @@
 #include "_archive.hpp"
 
 #include <ChannelUri.h>
-#include <Configuration.h>
 #include <fmt/format.h>
 
 #include <cstdlib>
@@ -27,7 +26,7 @@ using namespace fmt;
 namespace py = pybind11;
 
 
-recording::recording(shared_ptr<aeron::archive::AeronArchive> aeron_archive, int64_t id)
+recording::recording(shared_ptr<aeron::archive::client::AeronArchive> aeron_archive, int64_t id)
     :
         aeron_archive_(aeron_archive),
         id_(id)
@@ -85,18 +84,8 @@ archive::archive(pybind11::kwargs args)
     static constexpr auto default_aeron_dir_var = "AERON_DIR";
 
     // aeron archive context initialisation
-    unique_ptr<aeron::archive::Context> aeron_archive_context;
-    if (args.contains(config_file_key))
-    {
-        auto config_file = args[config_file_key].cast<string>();
-        aeron::archive::Configuration configuration(config_file);
-
-        aeron_archive_context = make_unique<aeron::archive::Context>(configuration);
-    }
-    else
-    {
-        aeron_archive_context = make_unique<aeron::archive::Context>();
-    }
+    unique_ptr<aeron::archive::client::Context> aeron_archive_context;
+    aeron_archive_context = make_unique<aeron::archive::client::Context>();
 
     // defaults from environment variables
     if(auto default_aeron_dir = getenv(default_aeron_dir_var))
@@ -159,7 +148,7 @@ archive::archive(pybind11::kwargs args)
         aeron_archive_context->controlMtuLength(control_mtu_length);
     }
 
-    aeron_archive_ = aeron::archive::AeronArchive::connect(*aeron_archive_context);
+    aeron_archive_ = aeron::archive::client::AeronArchive::connect(*aeron_archive_context);
 }
 
 unique_ptr<recording> archive::find(int64_t recording_id)

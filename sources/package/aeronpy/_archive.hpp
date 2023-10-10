@@ -21,7 +21,7 @@
 #include "_subscription.hpp"
 
 #include <Aeron.h>
-#include <AeronArchive.h>
+#include <client/AeronArchive.h>
 #include <pybind11/pybind11.h>
 
 #include <memory>
@@ -39,7 +39,7 @@ public:
      * @param aeron_archive An instance of archive this recording belongs to.
      * @param id Recording id.
      */
-    explicit recording(std::shared_ptr<aeron::archive::AeronArchive> aeron_archive, int64_t id);
+    explicit recording(std::shared_ptr<aeron::archive::client::AeronArchive> aeron_archive, int64_t id);
 
     /**
      * @brief Gets id of the recording.
@@ -80,7 +80,7 @@ public:
     std::string __str__() const;
 
 private:
-    std::shared_ptr<aeron::archive::AeronArchive> aeron_archive_;
+    std::shared_ptr<aeron::archive::client::AeronArchive> aeron_archive_;
     int64_t id_;
 
 };
@@ -151,7 +151,7 @@ private:
     int64_t find_latest_recording_id(const std::string& channel, int32_t streamId);
 
     int64_t recording_id_;
-    std::shared_ptr<aeron::archive::AeronArchive> aeron_archive_;
+    std::shared_ptr<aeron::archive::client::AeronArchive> aeron_archive_;
 
 };
 

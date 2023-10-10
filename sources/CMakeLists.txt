@@ -14,6 +14,8 @@ foreach(module_file ${modules_SRC})
     add_library(${name_without_extension} MODULE
             ${modules_SRC})
 
+    target_compile_options(${name_without_extension} PUBLIC -fPIC)
+
     target_link_libraries(${name_without_extension}
             ${PYTHON_LIBRARIES}
             ${SYSCALL_INTERCEPT_LIBRARIES}
@@ -25,8 +27,7 @@ foreach(module_file ${modules_SRC})
 
     add_dependencies(${name_without_extension}
             fmt
-            aeron
-            aeron-archive-client)
+            aeron)
 
     list(APPEND modules ${name_without_extension})
 endforeach()
